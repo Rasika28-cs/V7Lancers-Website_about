@@ -229,6 +229,20 @@ ul {
     display: none;
     align-items: center;
     gap: 2rem;
+    position: relative; /* Context for indicator */
+}
+
+.nav-indicator {
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gradient-text);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    pointer-events: none;
+    border-radius: 2px;
+    box-shadow: 0 0 8px var(--accent);
 }
 
 .nav-link {
@@ -238,25 +252,24 @@ ul {
     transition: var(--transition-smooth);
     position: relative;
     padding: 0.5rem 0;
-}
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--gradient-text);
-    transition: width 0.3s ease;
+    z-index: 1;
 }
 
 .nav-link:hover {
     color: var(--text-primary);
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); /* Subtle glow */
 }
 
-.nav-link:hover::after {
-    width: 100%;
+/* Active item neon pulse */
+.nav-link.active {
+    color: var(--text-primary);
+    text-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+    animation: neonPulse 2s infinite alternate;
+}
+
+@keyframes neonPulse {
+    0% { text-shadow: 0 0 10px rgba(59, 130, 246, 0.6); }
+    100% { text-shadow: 0 0 20px rgba(168, 85, 247, 0.8), 0 0 30px rgba(59, 130, 246, 0.6); }
 }
 
 .nav-actions {
@@ -686,6 +699,70 @@ ul {
 .reveal-card.active {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* 3D Hover & Spotlight Enhancements */
+.glass-card, .service-card {
+    position: relative;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+/* Spotlight Effect Layer */
+.glass-card::before, .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(600px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(255,255,255,0.1), transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: inherit;
+}
+
+[data-theme="dark"] .glass-card::before, [data-theme="dark"] .service-card::before {
+    background: radial-gradient(600px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(255,255,255,0.15), transparent 40%);
+}
+
+.glass-card:hover::before, .service-card:hover::before {
+    opacity: 1;
+}
+
+/* Make content stay above spotlight */
+.glass-card > *, .service-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Particles Canvas */
+#particles-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+[data-theme="dark"] #particles-bg {
+    opacity: 0.4;
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+    .glass-card, .service-card {
+        transform: none !important;
+    }
 }
 
 /* Media Queries for Desktop / Larger Screens */
