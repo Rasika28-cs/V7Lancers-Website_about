@@ -242,45 +242,43 @@ ul {
     position: absolute;
     bottom: -4px;
     left: 0;
-    width: 0;
     height: 2px;
     background: var(--gradient-text);
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-    pointer-events: none;
     border-radius: 2px;
     box-shadow: 0 0 8px var(--accent);
+    pointer-events: none;
+    will-change: transform, width;
 }
 
 .nav-link {
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-secondary);
-    transition: var(--transition-smooth);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.4s;
     position: relative;
     padding: 0.5rem 0;
     z-index: 1;
+    display: inline-block;
 }
 
 .nav-link:hover {
     color: var(--text-primary);
-    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-    /* Subtle glow */
+    transform: translateY(-1.5px) scale(1.02);
+    text-shadow: 0 0 12px rgba(37, 99, 235, 0.4);
 }
 
 /* Active item neon pulse */
 .nav-link.active {
     color: var(--text-primary);
-    text-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
-    animation: neonPulse 2s infinite alternate;
+    animation: premiumPulse 3s ease-in-out infinite alternate;
 }
 
-@keyframes neonPulse {
+@keyframes premiumPulse {
     0% {
-        text-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+        text-shadow: 0 0 8px rgba(37, 99, 235, 0.3);
     }
-
     100% {
-        text-shadow: 0 0 20px rgba(168, 85, 247, 0.8), 0 0 30px rgba(59, 130, 246, 0.6);
+        text-shadow: 0 0 16px rgba(37, 99, 235, 0.6), 0 0 24px rgba(147, 51, 234, 0.4);
     }
 }
 
@@ -902,5 +900,33 @@ ul {
 
     .feature-list {
         grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Ambient Particles */
+#particles-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+[data-theme="dark"] #particles-bg {
+    opacity: 0.35;
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .nav-indicator, .nav-link, .nav-link.active, #particles-bg {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+    }
+    #particles-bg {
+        display: none;
     }
 }
