@@ -225,6 +225,40 @@ ul {
     color: var(--accent);
 }
 
+.nav-links {
+    display: none;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: var(--transition-smooth);
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gradient-text);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--text-primary);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
 .nav-actions {
     display: flex;
     align-items: center;
@@ -656,6 +690,10 @@ ul {
 
 /* Media Queries for Desktop / Larger Screens */
 @media (min-width: 768px) {
+    .nav-links {
+        display: flex;
+    }
+
     .hero {
         text-align: center;
         padding-top: 10rem;
