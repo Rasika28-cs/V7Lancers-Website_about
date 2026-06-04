@@ -1,26 +1,26 @@
 :root {
     /* Light Theme Palette - Premium Tech Aesthetic */
-    --bg-main: #FAFAFC;
+    --bg-main: #F2F2F6;
     --bg-alt: #FFFFFF;
-    --text-primary: #111827;
-    --text-secondary: #4B5563;
+    --text-primary: #171A1D;
+    --text-secondary: #5C5E62;
 
-    --accent: #2563EB;
-    --accent-hover: #1D4ED8;
+    --accent: #996C6A;
+    --accent-hover: #D3A19E;
 
-    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-bg: rgba(242, 242, 246, 0.7);
     --glass-border: rgba(255, 255, 255, 0.5);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+    --glass-shadow: 0 8px 32px 0 rgba(23, 26, 29, 0.05);
 
-    --gradient-text: linear-gradient(135deg, #2563EB, #9333EA);
-    --gradient-card-1: linear-gradient(135deg, #EFF6FF, #DBEAFE);
-    --gradient-card-2: linear-gradient(135deg, #FDF4FF, #FAE8FF);
-    --gradient-card-3: linear-gradient(135deg, #F0FDF4, #DCFCE7);
-    --gradient-card-4: linear-gradient(135deg, #FFFBEB, #FEF3C7);
-    --gradient-card-5: linear-gradient(135deg, #F3F4F6, #E5E7EB);
-    --gradient-card-6: linear-gradient(135deg, #F5F3FF, #EDE9FE);
+    --gradient-text: linear-gradient(135deg, #996C6A, #D3A19E);
+    --gradient-card-1: linear-gradient(135deg, rgba(227, 210, 182, 0.3), rgba(227, 210, 182, 0.1));
+    --gradient-card-2: linear-gradient(135deg, rgba(211, 161, 158, 0.3), rgba(211, 161, 158, 0.1));
+    --gradient-card-3: linear-gradient(135deg, rgba(185, 200, 211, 0.3), rgba(185, 200, 211, 0.1));
+    --gradient-card-4: linear-gradient(135deg, rgba(199, 181, 203, 0.3), rgba(199, 181, 203, 0.1));
+    --gradient-card-5: linear-gradient(135deg, rgba(180, 181, 204, 0.3), rgba(180, 181, 204, 0.1));
+    --gradient-card-6: linear-gradient(135deg, rgba(159, 156, 161, 0.3), rgba(159, 156, 161, 0.1));
 
-    --border-color: #E5E7EB;
+    --border-color: #9F9CA1;
     --font-heading: 'Outfit', sans-serif;
     --font-body: 'Inter', sans-serif;
 
@@ -29,27 +29,27 @@
 
 [data-theme="dark"] {
     /* Dark Theme Palette */
-    --bg-main: #09090B;
-    --bg-alt: #121214;
-    --text-primary: #F9FAFB;
-    --text-secondary: #9CA3AF;
+    --bg-main: #171A1D;
+    --bg-alt: #1F2327;
+    --text-primary: #F2F2F6;
+    --text-secondary: #9F9CA1;
 
-    --accent: #3B82F6;
-    --accent-hover: #60A5FA;
+    --accent: #B4B5CC;
+    --accent-hover: #C7B5CB;
 
-    --glass-bg: rgba(24, 24, 27, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-bg: rgba(23, 26, 29, 0.7);
+    --glass-border: rgba(242, 242, 246, 0.1);
     --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 
-    --gradient-text: linear-gradient(135deg, #60A5FA, #A855F7);
-    --gradient-card-1: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(29, 78, 216, 0.05));
-    --gradient-card-2: linear-gradient(135deg, rgba(217, 70, 239, 0.1), rgba(192, 38, 211, 0.05));
-    --gradient-card-3: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
-    --gradient-card-4: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.05));
-    --gradient-card-5: linear-gradient(135deg, rgba(107, 114, 128, 0.1), rgba(75, 85, 99, 0.05));
-    --gradient-card-6: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.05));
+    --gradient-text: linear-gradient(135deg, #B4B5CC, #C7B5CB);
+    --gradient-card-1: linear-gradient(135deg, rgba(227, 210, 182, 0.1), rgba(227, 210, 182, 0.02));
+    --gradient-card-2: linear-gradient(135deg, rgba(211, 161, 158, 0.1), rgba(211, 161, 158, 0.02));
+    --gradient-card-3: linear-gradient(135deg, rgba(185, 200, 211, 0.1), rgba(185, 200, 211, 0.02));
+    --gradient-card-4: linear-gradient(135deg, rgba(199, 181, 203, 0.1), rgba(199, 181, 203, 0.02));
+    --gradient-card-5: linear-gradient(135deg, rgba(180, 181, 204, 0.1), rgba(180, 181, 204, 0.02));
+    --gradient-card-6: linear-gradient(135deg, rgba(159, 156, 161, 0.1), rgba(159, 156, 161, 0.02));
 
-    --border-color: #27272A;
+    --border-color: #5C5E62;
 }
 
 /* Base Styles */
