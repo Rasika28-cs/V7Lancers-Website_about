@@ -110,195 +110,101 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-    // 5. Navigation Indicator & Active State
-    const navLinksContainer = document.querySelector('.nav-links');
+    // 5. Directional Nav Link Underline
     const navLinks = document.querySelectorAll('.nav-link');
-    const indicator = document.querySelector('.nav-indicator');
+    
+    navLinks.forEach(link => {
+        const updateOrigin = (e) => {
+            const rect = link.getBoundingClientRect();
+            const relX = e.clientX - rect.left;
+            link.style.setProperty('--origin', relX < rect.width / 2 ? 'left center' : 'right center');
+        };
+        link.addEventListener('mouseenter', updateOrigin);
+        link.addEventListener('mouseleave', updateOrigin);
+    });
 
-    if (navLinksContainer && indicator) {
-        let activeLink = null; // Track current active item via scroll
-
-        function updateIndicator(link) {
-            if (!link) {
-                indicator.style.width = '0px';
-                return;
-            }
-            const linkRect = link.getBoundingClientRect();
-            const containerRect = navLinksContainer.getBoundingClientRect();
-            indicator.style.width = `${linkRect.width}px`;
-            indicator.style.transform = `translateX(${linkRect.left - containerRect.left}px)`;
-        }
-
-        navLinks.forEach(link => {
-            link.addEventListener('mouseenter', (e) => {
-                updateIndicator(e.target);
-            });
-        });
-
-        navLinksContainer.addEventListener('mouseleave', () => {
-            updateIndicator(activeLink); // Revert to active item
-        });
-
-        // Intersection observer to track active section
-        const sections = document.querySelectorAll('section[id]');
-        const sectionObserver = new IntersectionObserver((entries) => {
-            let found = false;
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.getAttribute('id');
-                    activeLink = document.querySelector(`.nav-link[href="#${id}"]`);
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    if (activeLink) {
-                        activeLink.classList.add('active');
-                        updateIndicator(activeLink);
-                        found = true;
-                    }
-                }
-            });
-            // Handle scrolling back to top where hero has no nav link match (reset active)
-            if (!found && window.scrollY < 200) {
+    // Handle Active state smoothly without indicators
+    const sections = document.querySelectorAll('section[id]');
+    const sectionObserver = new IntersectionObserver((entries) => {
+        let found = false;
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                const activeLink = document.querySelector(`.nav-link[href="#${id}"]`);
                 navLinks.forEach(l => l.classList.remove('active'));
-                activeLink = null;
-                updateIndicator(null);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                    found = true;
+                }
             }
-        }, { threshold: 0.3 });
+        });
+        if (!found && window.scrollY < 200) {
+            navLinks.forEach(l => l.classList.remove('active'));
+        }
+    }, { threshold: 0.3 });
+    sections.forEach(sec => sectionObserver.observe(sec));
 
-        sections.forEach(sec => sectionObserver.observe(sec));
-    }
-
-    // 6. 3D Hover & Spotlight Effects
-    const cards = document.querySelectorAll('.glass-card, .service-card');
+    // 6. Cinematic Depth Parallax Hover Effects
+    const cards = document.querySelectorAll('.glass-card, .service-card, .team-card');
     cards.forEach(card => {
+        const children = card.children;
+        
         card.addEventListener('mousemove', (e) => {
-            // Check for reduced motion
             if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
-            // Spotlight update via CSS Variables
-            card.style.setProperty('--mouse-x', `${x}px`);
-            card.style.setProperty('--mouse-y', `${y}px`);
-
-            // 3D Tilt calculation (subtle)
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -4; // Max 4deg
-            const rotateY = ((x - centerX) / centerX) * 4;
 
-            // GPU Accelerated Transform
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            // Subtle rotation
+            const rotateX = ((y - centerY) / centerY) * -5;
+            const rotateY = ((x - centerX) / centerX) * 5;
+
+            // Layered depth interaction
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+            // Independent internal element animation
+            Array.from(children).forEach((child, index) => {
+                // Ignore elements that shouldn't move
+                if(child.tagName === 'P' && child.className !== 'role') {
+                     const moveX = ((x - centerX) / centerX) * 3;
+                     const moveY = ((y - centerY) / centerY) * 3;
+                     child.style.transform = `translate3d(${moveX}px, ${moveY}px, 0px)`;
+                } else {
+                     const depth = (index + 2) * 5; // e.g. 10, 15, 20
+                     const moveX = ((x - centerX) / centerX) * depth;
+                     const moveY = ((y - centerY) / centerY) * depth;
+                     child.style.transform = `translate3d(${moveX}px, ${moveY}px, ${depth}px)`;
+                }
+            });
         });
 
         card.addEventListener('mouseleave', () => {
             if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
             
-            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-            // Delay removing transition for smooth reset
-            card.style.transition = 'transform 0.5s ease-out';
-            setTimeout(() => card.style.transition = '', 500);
+            // Exit animation with momentum
+            card.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+            
+            Array.from(children).forEach(child => {
+                child.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+                child.style.transform = `translate3d(0px, 0px, 0px)`;
+            });
+            
+            setTimeout(() => {
+                card.style.transition = '';
+                Array.from(children).forEach(child => child.style.transition = '');
+            }, 800);
         });
         
         card.addEventListener('mouseenter', () => {
             if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            // Entry animation without transition for instant binding to cursor
             card.style.transition = 'none';
+            Array.from(children).forEach(child => child.style.transition = 'none');
         });
     });
-
-    // 7. Floating Particles System (Canvas)
-    const canvas = document.getElementById('particles-bg');
-    if (canvas && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let width, height;
-        
-        // Mouse interaction area
-        let mouse = { x: null, y: null, radius: 120 };
-        
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        });
-
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-
-        window.addEventListener('resize', resize);
-        resize();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.size = Math.random() * 2.5 + 0.5;
-                this.speedX = Math.random() * 0.8 - 0.4;
-                this.speedY = Math.random() * 0.8 - 0.4;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                // Wrap around edges
-                if (this.x > width) this.x = 0;
-                if (this.x < 0) this.x = width;
-                if (this.y > height) this.y = 0;
-                if (this.y < 0) this.y = height;
-
-                // Subtle repulsion from mouse
-                if (mouse.x != null && mouse.y != null) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < mouse.radius) {
-                        const forceDirectionX = dx / distance;
-                        const forceDirectionY = dy / distance;
-                        const force = (mouse.radius - distance) / mouse.radius;
-                        this.x -= forceDirectionX * force * 1.5;
-                        this.y -= forceDirectionY * force * 1.5;
-                    }
-                }
-            }
-            draw() {
-                // Adjust colors dynamically based on theme
-                const isDark = htmlElement.getAttribute('data-theme') === 'dark';
-                ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(37, 99, 235, 0.4)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.closePath();
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            // Optimize particle count based on screen size (max 80)
-            let numParticles = Math.min((width * height) / 15000, 80);
-            for (let i = 0; i < numParticles; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, width, height);
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-            }
-            requestAnimationFrame(animateParticles);
-        }
-
-        initParticles();
-        requestAnimationFrame(animateParticles);
-        
-        // Re-draw on theme change to update colors seamlessly
-        themeToggleBtn.addEventListener('click', () => {
-            // Allow DOM update first
-            setTimeout(() => {
-               // Particles will auto draw with new theme color in next frame
-            }, 50);
-        });
-    }
 });
